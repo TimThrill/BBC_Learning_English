@@ -68,7 +68,7 @@ if 3 == len(sys.argv):
 	end_date = sys.argv[2]
 	print start_date + ' ' + end_date
 	if is_valid_date(start_date) and is_valid_date(end_date):
-		try
+		try:
 			start_date = datetime.datetime.strptime(start_date, '%d%m%y')
 			end_date = datetime.datetime.strptime(end_date, '%d%m%y')
 			print 'Dates are valid'
