@@ -95,6 +95,6 @@ if 3 == len(sys.argv):
 		sys.exit(1)
 else: 
         print 'Please input as following format' 
-        print 'python filename.py(start date) ddmmyy ddmmyy(end date)'
+        print 'python filename.py ddmmyy(start date) ddmmyy(end date)'
 	sys.exit(1)
 
