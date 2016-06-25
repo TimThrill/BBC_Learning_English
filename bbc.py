@@ -45,7 +45,7 @@ def is_valid_date(date):
 		return False
 
 
-def get_file_by_url(sub_dir):
+def get_file_by_url(sub_dir, file_dir):
 	try:
 		url = root_url + sub_dir
 
@@ -56,16 +56,17 @@ def get_file_by_url(sub_dir):
 		else:
         		print 'Cannot extract download url'
 
-		file_dir = '/home/cong/' + sub_dir + '.pdf'
+		file_dir = file_dir + sub_dir + '.pdf'
 
 		download_file(download_url, file_dir)
 	except urllib2.HTTPError, e:
 		raise
 
 
-if 3 == len(sys.argv): 
+if 4 == len(sys.argv): 
 	start_date = sys.argv[1]
 	end_date = sys.argv[2]
+	file_path = sys.argv[3]
 	print start_date + ' ' + end_date
 	if is_valid_date(start_date) and is_valid_date(end_date):
 		try:
@@ -84,7 +85,7 @@ if 3 == len(sys.argv):
 			sub_dir = 'ep-' + nearest_Tuesday.strftime('%y%m%d')
 			print 'sub-dir: ' + sub_dir
 			try:
-				get_file_by_url(sub_dir)
+				get_file_by_url(sub_dir, file_path)
 			except urllib2.HTTPError, e:
 				print 'Download file: ' + sub_dir + ' failed!'
 			nearest_Tuesday =  nearest_Tuesday + datetime.timedelta(weeks=1)
@@ -95,6 +96,6 @@ if 3 == len(sys.argv):
 		sys.exit(1)
 else: 
         print 'Please input as following format' 
-        print 'python filename.py ddmmyy(start date) ddmmyy(end date)'
+        print 'python filename.py ddmmyy(start date) ddmmyy(end date) path'
 	sys.exit(1)
 
