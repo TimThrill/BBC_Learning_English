@@ -9,9 +9,15 @@ import sys
 # import regex
 import re
 import datetime
+# import configer parser
+import ConfigParser
+import os
 
-
-root_url = 'http://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak/'
+PROGRAM_NAME = 'THE_ENGLISH_WE_SPEAK'
+config_file = ConfigParser.ConfigParser()
+config_file.readfp(open('./bbc.ini'))
+root_url = config_file.get(PROGRAM_NAME, 'program_url')
+suffix = config_file.get(PROGRAM_NAME, 'suffix')
 
 # Input a url and extract the download url
 def extract_download_url(url):
@@ -33,7 +39,7 @@ def download_file(url, path):
 		f = open(path, 'w')
 		f.write(connection.read())
 		f.close()
-		print "download file finished"
+		print "downloaded file to: " + path
 	except urllib2.HTTPError, e:
 		print e.getcode()
 		raise
@@ -67,7 +73,13 @@ if 4 == len(sys.argv):
 	start_date = sys.argv[1]
 	end_date = sys.argv[2]
 	file_path = sys.argv[3]
+
+	# Check if the path is end with '/'
+	if not file_path.endswith(os.sep):
+		file_path = file_path + os.sep
+
 	print start_date + ' ' + end_date
+
 	if is_valid_date(start_date) and is_valid_date(end_date):
 		try:
 			start_date = datetime.datetime.strptime(start_date, '%d%m%y')
@@ -82,7 +94,7 @@ if 4 == len(sys.argv):
 		print('\n')
 		while nearest_Tuesday <= end_date:
 			print nearest_Tuesday
-			sub_dir = 'ep-' + nearest_Tuesday.strftime('%y%m%d')
+			sub_dir = suffix + nearest_Tuesday.strftime('%y%m%d')
 			print 'sub-dir: ' + sub_dir
 			try:
 				get_file_by_url(sub_dir, file_path)
